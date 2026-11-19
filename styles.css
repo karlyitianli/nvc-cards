@@ -77,7 +77,26 @@ button {
   touch-action: manipulation;
 }
 
-button:hover { border-color: var(--muted); }
+.top-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#lang-select {
+  font-family: "Allo", system-ui, sans-serif;
+  font-variation-settings: "ROND" 40;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+#lang-select:hover { border-color: var(--muted); }
 
 .decks {
   display: flex;
@@ -238,6 +257,26 @@ button:hover { border-color: var(--muted); }
   color: var(--muted);
   margin: 24px 0 0;
 }
+
+/* Pinyin lines, shown only in Chinese mode. */
+.card-pinyin {
+  font-size: 17px;
+  color: var(--muted);
+  margin: 10px 0 0;
+  display: none;
+}
+
+.card-example-pinyin {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 10px 0 0;
+  max-width: 460px;
+  display: none;
+}
+
+html[data-lang="zh"] .card-pinyin,
+html[data-lang="zh"] .card-example-pinyin { display: block; }
 
 .done-word { color: var(--accent); }
 

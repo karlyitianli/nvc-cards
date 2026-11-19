@@ -17,13 +17,63 @@ const subtitleEl = document.getElementById("deck-subtitle");
 const counterEl = document.getElementById("counter");
 const progressEl = document.getElementById("progress-bar");
 const themeBtn = document.getElementById("theme-toggle");
+const titleEl = document.getElementById("app-title");
+const langSelect = document.getElementById("lang-select");
+const wordPinyinEl = document.getElementById("card-word-pinyin");
+const wordBackPinyinEl = document.getElementById("card-word-back-pinyin");
+const examplePinyinEl = document.getElementById("card-example-pinyin");
+const hintFrontEl = document.getElementById("hint-front");
+const hintBackEl = document.getElementById("hint-back");
+const doneTitleEl = document.getElementById("done-title");
+const doneWordEl = document.getElementById("done-word");
+const doneBodyEl = document.getElementById("done-body");
+const doneHintEl = document.getElementById("done-hint");
+const footerEl = document.getElementById("app-footer");
+const prevBtn = document.getElementById("prev-btn");
+const shuffleBtn = document.getElementById("shuffle-btn");
+const nextBtn = document.getElementById("next-btn");
+
+const STRINGS = {
+  en: {
+    title: "NVC Cards",
+    tabs: { needs: "Needs", "feelings-met": "Feelings, met", "feelings-unmet": "Feelings, unmet" },
+    hintReveal: "Tap to reveal",
+    hintHide: "Tap to hide",
+    prev: "Previous",
+    shuffle: "Shuffle",
+    next: "Next",
+    themeDark: "Dark",
+    themeLight: "Light",
+    doneTitle: "Deck complete",
+    doneWord: "Done",
+    doneBody: "You went through all 30 cards.",
+    doneHint: "Shuffle or restart to go again.",
+    footer: "90 cards. Tap a card to flip it and reveal its example. Swipe or drag either way to move to the next card; Previous goes back. Your place in each deck is saved on this device.",
+  },
+  zh: {
+    title: "非暴力沟通卡片",
+    tabs: { needs: "需求", "feelings-met": "满足时的感受", "feelings-unmet": "未满足时的感受" },
+    hintReveal: "点按查看",
+    hintHide: "点按隐藏",
+    prev: "上一张",
+    shuffle: "洗牌",
+    next: "下一张",
+    themeDark: "深色",
+    themeLight: "浅色",
+    doneTitle: "本组已完成",
+    doneWord: "完成",
+    doneBody: "你已经看完了全部 30 张卡片。",
+    doneHint: "点洗牌或重新开始。",
+    footer: "共 90 张卡片。点按卡片翻面查看例句。向左或向右滑动都可以翻到下一张，返回请点“上一张”。你的进度会保存在这台设备上。",
+  },
+};
 
 let decks = {};
 let state = loadState();
 let revealed = false;
 
 function loadState() {
-  const fallback = { deck: "needs", order: {}, index: {}, theme: null };
+  const fallback = { deck: "needs", order: {}, index: {}, theme: null, lang: "en" };
   try {
     const raw = localStorage.getItem(STORE_KEY);
     if (!raw) return fallback;
@@ -33,6 +83,7 @@ function loadState() {
       order: parsed.order || {},
       index: parsed.index || {},
       theme: parsed.theme || null,
+      lang: parsed.lang || "en",
     };
   } catch (e) {
     return fallback;
@@ -51,7 +102,29 @@ function applyTheme() {
   const theme = state.theme ||
     (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   document.documentElement.setAttribute("data-theme", theme);
-  themeBtn.textContent = theme === "dark" ? "Light" : "Dark";
+  const s = STRINGS[state.lang];
+  themeBtn.textContent = theme === "dark" ? s.themeLight : s.themeDark;
+}
+
+function applyLang() {
+  const s = STRINGS[state.lang];
+  document.documentElement.setAttribute("data-lang", state.lang);
+  langSelect.value = state.lang;
+  titleEl.textContent = s.title;
+  document.querySelectorAll(".deck-tab").forEach((tab) => {
+    tab.textContent = s.tabs[tab.dataset.deck];
+  });
+  hintFrontEl.textContent = s.hintReveal;
+  hintBackEl.textContent = s.hintHide;
+  prevBtn.textContent = s.prev;
+  shuffleBtn.textContent = s.shuffle;
+  nextBtn.textContent = s.next;
+  doneTitleEl.textContent = s.doneTitle;
+  doneWordEl.textContent = s.doneWord;
+  doneBodyEl.textContent = s.doneBody;
+  doneHintEl.textContent = s.doneHint;
+  footerEl.textContent = s.footer;
+  applyTheme();
 }
 
 function shuffledOrder(n) {
@@ -95,7 +168,7 @@ function render() {
   document.querySelectorAll(".deck-tab").forEach((tab) => {
     tab.setAttribute("aria-selected", tab.dataset.deck === state.deck ? "true" : "false");
   });
-  subtitleEl.textContent = deck.subtitle;
+  subtitleEl.textContent = state.lang === "zh" && deck.subtitle_zh ? deck.subtitle_zh : deck.subtitle;
 
   // Toggle with inline display as well as hidden: the .card rule sets
   // display:flex, which overrides the browser's built-in [hidden] rule,
@@ -106,7 +179,7 @@ function render() {
     doneEl.hidden = false;
     cardEl.style.display = "none";
     doneEl.style.display = "";
-    counterEl.textContent = total + " of " + total;
+    counterEl.textContent = state.lang === "zh" ? total + " / " + total : total + " of " + total;
     progressEl.style.width = "100%";
     return;
   }
@@ -118,12 +191,16 @@ function render() {
   doneEl.style.display = "none";
   cardInner.classList.remove("flipped");
   const card = deck.cards[order[idx]];
-  groupEl.textContent = card.group;
-  wordEl.textContent = card.word;
-  wordBackEl.textContent = card.word;
-  exampleEl.textContent = card.example;
+  const zh = state.lang === "zh" && card.zh ? card.zh : null;
+  groupEl.textContent = zh ? zh.group : card.group;
+  wordEl.textContent = zh ? zh.word : card.word;
+  wordBackEl.textContent = zh ? zh.word : card.word;
+  exampleEl.textContent = zh ? zh.example : card.example;
+  wordPinyinEl.textContent = zh ? zh.pinyin : "";
+  wordBackPinyinEl.textContent = zh ? zh.pinyin : "";
+  examplePinyinEl.textContent = zh ? zh.example_pinyin : "";
   revealed = false;
-  counterEl.textContent = (idx + 1) + " of " + total;
+  counterEl.textContent = state.lang === "zh" ? (idx + 1) + " / " + total : (idx + 1) + " of " + total;
   progressEl.style.width = ((idx + 1) / total * 100) + "%";
 }
 
@@ -148,9 +225,9 @@ function animateAndGo(direction, step) {
   }, 220);
 }
 
-function next() {
+function next(direction) {
   if (currentIndex() >= currentDeck().cards.length) return;
-  animateAndGo("left", 1);
+  animateAndGo(direction === "right" ? "right" : "left", 1);
 }
 
 function prev() {
@@ -213,8 +290,9 @@ function endDrag(e) {
   const wasDrag = drag.moved;
   drag = null;
   if (wasDrag && (Math.abs(dx) > width * 0.25 || velocity > 0.5)) {
-    if (dx < 0) next();
-    else prev();
+    // Any swipe past the threshold advances, left or right. Only the
+    // Previous button goes back. The card flies out the way it was dragged.
+    next(dx < 0 ? "left" : "right");
     return;
   }
   if (!wasDrag) reveal();
@@ -237,16 +315,17 @@ cardEl.addEventListener("keydown", (e) => {
   }
 });
 
-document.getElementById("next-btn").addEventListener("click", next);
-document.getElementById("prev-btn").addEventListener("click", prev);
-document.getElementById("shuffle-btn").addEventListener("click", shuffle);
+nextBtn.addEventListener("click", () => next());
+prevBtn.addEventListener("click", prev);
+shuffleBtn.addEventListener("click", shuffle);
 document.querySelectorAll(".deck-tab").forEach((tab) => {
   tab.addEventListener("click", () => switchDeck(tab.dataset.deck));
 });
 
+// Both arrow keys advance. Previous is the only way back.
 document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") next();
-  if (e.key === "ArrowLeft") prev();
+  if (e.key === "ArrowLeft") next();
 });
 
 doneEl.addEventListener("click", () => {
@@ -260,12 +339,19 @@ themeBtn.addEventListener("click", () => {
   applyTheme();
 });
 
+langSelect.addEventListener("change", () => {
+  state.lang = langSelect.value;
+  saveState();
+  applyLang();
+  render();
+});
+
 async function init() {
-  applyTheme();
+  applyLang();
   for (const deck of DECKS) {
     const res = await fetch(deck.file);
     const data = await res.json();
-    decks[deck.id] = { ...deck, cards: data.cards, subtitle: data.subtitle, title: data.title };
+    decks[deck.id] = { ...deck, cards: data.cards, subtitle: data.subtitle, subtitle_zh: data.subtitle_zh, title: data.title };
   }
   render();
 }

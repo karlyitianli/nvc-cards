@@ -14,9 +14,11 @@ Three decks, 30 cards each, 90 total. Curated from the standard CNVC feelings an
 
 Each card shows the word big. Tap the card to flip it and reveal its example, written in the full NVC frame: "I feel ___ because I need ___."
 
+Chinese is built in: the language dropdown next to the theme button switches the whole app to simplified Chinese, with pinyin under the word and under the example sentence. All 90 words and examples are translated, and the choice is saved on the device.
+
 ## Use
 
-- Swipe, drag, click the Previous and Next buttons, or use the left and right arrow keys to move through a deck.
+- Swipe or drag either way, or use the arrow keys, to move to the next card. The Previous button is the only way back.
 - Tap a card to reveal or hide its example.
 - The cards sit as a visible stack: the next two cards peek out above the top one, and the stack settles up as you move through a deck. Dragging the top card lifts the stack to meet it.
 - Shuffle reshuffles the current deck and starts from the top.
