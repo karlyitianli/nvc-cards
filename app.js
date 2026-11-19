@@ -6,11 +6,12 @@ const DECKS = [
 
 const STORE_KEY = "nvc-cards:v1";
 const cardEl = document.getElementById("card");
+const cardInner = document.getElementById("card-inner");
 const doneEl = document.getElementById("card-done");
 const groupEl = document.getElementById("card-group");
 const wordEl = document.getElementById("card-word");
+const wordBackEl = document.getElementById("card-word-back");
 const exampleEl = document.getElementById("card-example");
-const hintEl = document.getElementById("card-hint");
 const subtitleEl = document.getElementById("deck-subtitle");
 const counterEl = document.getElementById("counter");
 const progressEl = document.getElementById("progress-bar");
@@ -112,12 +113,12 @@ function render() {
   doneEl.hidden = true;
   cardEl.style.display = "";
   doneEl.style.display = "none";
+  cardInner.classList.remove("flipped");
   const card = deck.cards[order[idx]];
   groupEl.textContent = card.group;
   wordEl.textContent = card.word;
+  wordBackEl.textContent = card.word;
   exampleEl.textContent = card.example;
-  exampleEl.hidden = true;
-  hintEl.textContent = "Tap to reveal";
   revealed = false;
   counterEl.textContent = (idx + 1) + " of " + total;
   progressEl.style.width = ((idx + 1) / total * 100) + "%";
@@ -125,8 +126,7 @@ function render() {
 
 function reveal() {
   revealed = !revealed;
-  exampleEl.hidden = !revealed;
-  hintEl.textContent = revealed ? "Tap to hide" : "Tap to reveal";
+  cardInner.classList.toggle("flipped", revealed);
 }
 
 function animateAndGo(direction, step) {

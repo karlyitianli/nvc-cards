@@ -12,7 +12,7 @@ Three decks, 30 cards each, 90 total. Curated from the standard CNVC feelings an
 - **Feelings when needs are met**: for example grateful, calm, curious.
 - **Feelings when needs are unmet**: for example frustrated, lonely, overwhelmed.
 
-Each card shows the word big. Tap the card to reveal its example, written in the full NVC frame: "I feel ___ because I need ___."
+Each card shows the word big. Tap the card to flip it and reveal its example, written in the full NVC frame: "I feel ___ because I need ___."
 
 ## Use
 
