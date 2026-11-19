@@ -95,9 +95,14 @@ function render() {
   });
   subtitleEl.textContent = deck.subtitle;
 
+  // Toggle with inline display as well as hidden: the .card rule sets
+  // display:flex, which overrides the browser's built-in [hidden] rule,
+  // and an inline style wins over any stylesheet version.
   if (idx >= total) {
     cardEl.hidden = true;
     doneEl.hidden = false;
+    cardEl.style.display = "none";
+    doneEl.style.display = "";
     counterEl.textContent = total + " of " + total;
     progressEl.style.width = "100%";
     return;
@@ -105,6 +110,8 @@ function render() {
 
   cardEl.hidden = false;
   doneEl.hidden = true;
+  cardEl.style.display = "";
+  doneEl.style.display = "none";
   const card = deck.cards[order[idx]];
   groupEl.textContent = card.group;
   wordEl.textContent = card.word;
