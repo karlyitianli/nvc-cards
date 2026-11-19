@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NVC Cards</title>
+<meta name="description" content="Swipable flashcard decks for reviewing NVC feelings and needs words.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="page">
+  <header class="top">
+    <h1>NVC Cards</h1>
+    <button id="theme-toggle" type="button" aria-label="Toggle dark mode">Dark</button>
+  </header>
+
+  <nav class="decks" aria-label="Decks">
+    <button type="button" data-deck="needs" class="deck-tab">Needs</button>
+    <button type="button" data-deck="feelings-met" class="deck-tab">Feelings, met</button>
+    <button type="button" data-deck="feelings-unmet" class="deck-tab">Feelings, unmet</button>
+  </nav>
+
+  <p class="deck-subtitle" id="deck-subtitle"></p>
+
+  <section class="stage" aria-live="polite">
+    <article class="card" id="card" tabindex="0" aria-label="Flashcard. Tap to reveal the example.">
+      <p class="card-group" id="card-group"></p>
+      <p class="card-word" id="card-word"></p>
+      <p class="card-example" id="card-example" hidden></p>
+      <p class="card-hint" id="card-hint">Tap to reveal</p>
+    </article>
+    <article class="card card-done" id="card-done" hidden>
+      <p class="card-group">Deck complete</p>
+      <p class="card-word done-word">Done</p>
+      <p class="card-example">You went through all 30 cards.</p>
+      <p class="card-hint">Shuffle or restart to go again.</p>
+    </article>
+  </section>
+
+  <div class="progress">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+  <p class="counter" id="counter"></p>
+
+  <div class="controls">
+    <button id="prev-btn" type="button">Previous</button>
+    <button id="shuffle-btn" type="button">Shuffle</button>
+    <button id="next-btn" type="button">Next</button>
+  </div>
+
+  <footer>
+    <p>90 cards. Tap a card to reveal its example. Swipe, drag, click, or use the arrow keys to move through a deck. Your place in each deck is saved on this device.</p>
+  </footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
