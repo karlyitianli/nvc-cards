@@ -18,6 +18,7 @@ Each card shows the word big. Tap the card to flip it and reveal its example, wr
 
 - Swipe, drag, click the Previous and Next buttons, or use the left and right arrow keys to move through a deck.
 - Tap a card to reveal or hide its example.
+- The cards sit as a visible stack: the next two cards peek out from behind the top one, and the stack settles up as you move through a deck. Dragging the top card lifts the stack to meet it.
 - Shuffle reshuffles the current deck and starts from the top.
 - Your place in each deck is saved in localStorage on your device, so you pick up where you left off.
 

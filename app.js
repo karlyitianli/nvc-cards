@@ -5,6 +5,7 @@ const DECKS = [
 ];
 
 const STORE_KEY = "nvc-cards:v1";
+const deckEl = document.getElementById("deck");
 const cardEl = document.getElementById("card");
 const cardInner = document.getElementById("card-inner");
 const doneEl = document.getElementById("card-done");
@@ -100,6 +101,7 @@ function render() {
   // display:flex, which overrides the browser's built-in [hidden] rule,
   // and an inline style wins over any stylesheet version.
   if (idx >= total) {
+    deckEl.classList.add("empty");
     cardEl.hidden = true;
     doneEl.hidden = false;
     cardEl.style.display = "none";
@@ -111,6 +113,7 @@ function render() {
 
   cardEl.hidden = false;
   doneEl.hidden = true;
+  deckEl.classList.remove("empty");
   cardEl.style.display = "";
   doneEl.style.display = "none";
   cardInner.classList.remove("flipped");
@@ -136,8 +139,10 @@ function animateAndGo(direction, step) {
   if (next < 0 || next > deck.cards.length) return;
   const flyClass = direction === "left" ? "fly-left" : "fly-right";
   cardEl.classList.add(flyClass);
+  deckEl.classList.add("advancing");
   setTimeout(() => {
     cardEl.classList.remove(flyClass);
+    deckEl.classList.remove("advancing");
     setIndex(next);
     render();
   }, 220);
@@ -179,6 +184,7 @@ cardEl.addEventListener("pointerdown", (e) => {
   drag = { startX: e.clientX, x: 0, moved: false, startTime: Date.now() };
   cardEl.setPointerCapture(e.pointerId);
   cardEl.classList.add("dragging");
+  deckEl.classList.add("dragging");
 });
 
 cardEl.addEventListener("pointermove", (e) => {
@@ -188,6 +194,9 @@ cardEl.addEventListener("pointermove", (e) => {
   if (drag.moved) {
     const rotate = drag.x / 40;
     cardEl.style.transform = "translateX(" + drag.x + "px) rotate(" + rotate + "deg)";
+    // The stack rises to meet the card as it is dragged away.
+    const lift = Math.min(Math.abs(drag.x) / (cardEl.offsetWidth * 0.25), 1);
+    deckEl.style.setProperty("--lift", lift.toFixed(3));
   }
 });
 
@@ -197,6 +206,8 @@ function endDrag(e) {
   const dt = Date.now() - drag.startTime;
   const velocity = Math.abs(dx) / Math.max(dt, 1);
   cardEl.classList.remove("dragging");
+  deckEl.classList.remove("dragging");
+  deckEl.style.setProperty("--lift", 0);
   cardEl.style.transform = "";
   const width = cardEl.offsetWidth;
   const wasDrag = drag.moved;
@@ -214,6 +225,8 @@ cardEl.addEventListener("pointercancel", () => {
   if (!drag) return;
   drag = null;
   cardEl.classList.remove("dragging");
+  deckEl.classList.remove("dragging");
+  deckEl.style.setProperty("--lift", 0);
   cardEl.style.transform = "";
 });
 

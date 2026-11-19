@@ -23,7 +23,10 @@
   <p class="deck-subtitle" id="deck-subtitle"></p>
 
   <section class="stage" aria-live="polite">
-    <article class="card" id="card" tabindex="0" aria-label="Flashcard. Tap to flip and reveal the example.">
+    <div class="deck" id="deck">
+      <div class="ghost-card ghost-1" aria-hidden="true"></div>
+      <div class="ghost-card ghost-2" aria-hidden="true"></div>
+      <article class="card" id="card" tabindex="0" aria-label="Flashcard. Tap to flip and reveal the example.">
       <div class="card-inner" id="card-inner">
         <div class="card-face card-front">
           <p class="card-group" id="card-group"></p>
@@ -37,6 +40,7 @@
         </div>
       </div>
     </article>
+    </div>
     <article class="card card-done" id="card-done" hidden>
       <p class="card-group">Deck complete</p>
       <p class="card-word done-word">Done</p>
