@@ -117,7 +117,7 @@ button:hover { border-color: var(--muted); }
   -webkit-user-select: none;
   touch-action: pan-y;
   transition: transform 0.25s ease, opacity 0.25s ease;
-  will-change: transform;
+  /* No will-change here: it can flatten the 3D flip context of .card-inner. */
 }
 
 .card.dragging { transition: none; }
