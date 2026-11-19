@@ -26,6 +26,9 @@ html[data-theme="dark"] {
 
 * { box-sizing: border-box; }
 
+/* The .card rule sets display:flex, which would override the hidden attribute. */
+.card[hidden] { display: none; }
+
 body {
   margin: 0;
   background: var(--bg);
